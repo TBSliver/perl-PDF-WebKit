@@ -15,7 +15,10 @@ use Moo;
 use namespace::clean;
 
 has source      => ( is => 'rw' );
-has stylesheets => ( is => 'rw' );
+has stylesheets => (
+  is => 'rw',
+  default => sub { return [] },
+);
 has options     => ( is => 'ro', writer => '_set_options' );
 
 around 'BUILDARGS' => sub {
@@ -35,7 +38,6 @@ sub BUILD {
   my ($self,$args) = @_;
 
   $self->source( PDF::WebKit::Source->new($args->{source}) );
-  $self->stylesheets( [] );
   $self->_set_options({
     $self->_normalize_options(%{ $self->configuration->default_options }),
     $self->_normalize_options(%{ $args->{options} }),
